@@ -1,0 +1,26 @@
+<template name="datePickerPopup">
+	<div class="datepicker-ex dropdown-menu-ex unselectable" {{getStyle}}>
+		<div class="datepicker-days" style="display: block;">
+			<table class=" table-condensed">
+				<thead>
+					<tr>
+						<th class="prevMonth">‹</th>
+						<th colspan="5">{{selectedMonth}} {{selectedYear}}
+							<button class="spinbox-button decYear"><i class="fa fa-minus-circle"></i></button>
+							<button class="spinbox-button incYear"><i class="fa fa-plus-circle"></i></button>
+						</th>
+						<th class="nextMonth">›</th>
+					</tr>
+					<tr>
+						{{#each weekdays}}
+							<th class="dow">{{weekday}}</th>
+						{{/each}}
+					</tr>
+				</thead>
+				<tbody>
+					{{{calendarHtml}}}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</template>

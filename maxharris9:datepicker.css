@@ -1,0 +1,11 @@
+button {
+	color: white;
+}
+
+.saved {
+	background-color: blue;
+}
+
+.unsaved {
+	background-color: orange;
+}

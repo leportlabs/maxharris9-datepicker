@@ -1,0 +1,73 @@
+body {
+   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+   font-weight: 300;
+}
+
+.datepicker-ex {
+	padding: 15px;
+	border-radius: 0px;
+	direction: ltr;
+	line-height: 2;
+}
+
+.datepicker-ex.dropdown-menu-ex {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	float: left;
+	display: none;
+	min-width: 160px;
+	list-style: none;
+	background-color: #ffffff;
+	border: none;
+	border-radius: 0px;
+
+	-webkit-filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.125));
+	-moz-filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.125));
+	-ms-filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.125));
+	-o-filter: drop-shadow(0px px 5px rgba(0,0,0,0.125));
+	filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.125));
+	-webkit-transform: translateZ(0); /* fixes blurriness on retina displays in webkit */
+
+	-webkit-background-clip: padding-box;
+	-moz-background-clip: padding;
+	background-clip: padding-box;
+}
+
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  cursor: default;
+}
+
+.datepicker-ex td {
+	width: 35px;
+	text-align: center;
+}
+
+.datepicker-ex th {
+	text-align: center;
+}
+
+.datepicker-ex table tr td.day:hover,
+.datepicker-ex table tr td.day.focused {
+	background: #eeeeee;
+	cursor: pointer;
+}
+
+.datepicker-ex.dropdown-menu-ex:after {
+	bottom: 100%;
+	left: 20px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: none;
+	border-bottom-color: #ffffff;
+	border-width: 15px;
+	margin-left: -15px;
+}
