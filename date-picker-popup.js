@@ -32,9 +32,9 @@ var decodeId = function (id) {
 	var tokenizedId = id.split('-');
 
 	return {
-		'month': tokenizedId[0],
-		'day': tokenizedId[1],
-		'year': tokenizedId[2],
+		'month': parseInt(tokenizedId[0]),
+		'day': parseInt(tokenizedId[1]),
+		'year': parseInt(tokenizedId[2]),
 		'guid': tokenizedId[3]
 	};
 };
@@ -74,6 +74,7 @@ Template.datePickerPopup.helpers({
 	},
 	remove: function () {
 		Template.parentData(1).openedState = false;
+		console.log('Template.instance():', Template.instance());
 		Blaze.remove(Template.instance().data.renderedView);
 	},
 	weekdays: function () {
@@ -121,7 +122,6 @@ Template.datePickerPopup.events({
 			Template.parentData(1).month = date.month;
 			Template.parentData(1).day = date.day;
 			Template.parentData(1).year = date.year;
-
 
 			template.data.parentUpdateCallback();
 			Template.datePickerPopup.remove();

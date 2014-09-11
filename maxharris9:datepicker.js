@@ -36,9 +36,13 @@ var parseDate = function (date) {
 	};
 }
 
+var encodeDate = function (day, month, year) {
+	return month + '/' + day + '/' + year;
+}
+
 Template.datePicker.helpers({
-	setup: function (currentDate, saveCallback) {
-		var domElement = document.getElementById('editableDateThing');
+	setup: function (currentDate, saveCallback, elementId) {
+		var domElement = document.getElementById(elementId);
 		var dateParts = parseDate(currentDate);
 
 		renderedView = Blaze.renderWithData(Template.datePicker, { 'saveCallback': saveCallback, 'month': dateParts.month, 'day': dateParts.day, 'year': dateParts.year, 'currentDate': currentDate, 'guid': generateGuid() }, domElement);
@@ -46,7 +50,7 @@ Template.datePicker.helpers({
 	currentDate: function () {
 		ti.depend('currentDateDep');
 		return wrapTemplateInstance(function (data) {
-			return data.currentDate;
+			return encodeDate(data.day, data.month, data.year); // data.currentDate;
 		});
 	},
 	guid: function () {
@@ -68,7 +72,7 @@ Template.datePicker.events({
 				return;
 			}
 
-			var biteyCallback = function () {
+			var saveCallback = function () {
 				template.data.saveCallback(template.data.currentDate);
 				ti.changed('currentDateDep');
 
@@ -81,7 +85,7 @@ Template.datePicker.events({
 			var p = jQuery('#' + 'date-picker-calendar-button-' + template.data.guid);
 			var position = p.position();
 
-			template.data.datePickerPopupView = Template.datePickerPopup.setup(biteyCallback, template.view, position.left - 12, position.top + 32, domElement, template.data.month, template.data.day, template.data.year);
+			template.data.datePickerPopupView = Template.datePickerPopup.setup(saveCallback, template.view, position.left - 12, position.top + 32, domElement, template.data.month, template.data.day, template.data.year);
 			template.data.openedState = true;
 		}
 	}

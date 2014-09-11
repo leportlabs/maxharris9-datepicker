@@ -4,7 +4,7 @@ var encodeId = function (month, day, year, guid) {
 
 Calendar = (function () {
 	return function (day, month, year, guid) {
-		var _day = day;
+		var _day = day; // this could be used to mark the highlighted date - don't use this to calculate the calendar
 		var _month = month;
 		var _year = year;
 		var _guid = guid;
@@ -44,7 +44,7 @@ Calendar = (function () {
 				monthLengths[1] = 29; // leap years add a day to February
 			}
 
-			return _generateCalendar(_getWeekDay(_day, _month, _year), monthLengths[_month - 1]);
+			return _generateCalendar(_getWeekDay(1, _month, _year), monthLengths[_month - 1]);
 		};
 		var _calItems = _fillCalendar();
 
@@ -78,7 +78,7 @@ Calendar = (function () {
 				return _calItems;
 			},
 			__getTestWeekDay__: function (day, month, year) {
-				return _getWeekDay(day, month, year);
+				return _getWeekDay(1, month, year);
 			}
 		};
 	};
