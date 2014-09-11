@@ -83,13 +83,3 @@ Calendar = (function () {
 		};
 	};
 } ());
-
-// var ExtendedCalendar = (function () {
-// 	return function () {
-// 		var cal = Calendar();
-// 		cal.newMethod = function () {
-// 			console.log("here's a new method that extends the calendar class");
-// 		};
-// 		return cal;
-// 	}
-// } ());
