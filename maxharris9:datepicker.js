@@ -50,7 +50,7 @@ Template.datePicker.helpers({
 	currentDate: function () {
 		ti.depend('currentDateDep');
 		return wrapTemplateInstance(function (data) {
-			return encodeDate(data.day, data.month, data.year); // data.currentDate;
+			return encodeDate(data.day, data.month, data.year);
 		});
 	},
 	guid: function () {
