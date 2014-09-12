@@ -1,5 +1,5 @@
 Package.describe({
-	summary: "Native date picker without dependencies",
+	summary: "Native date picker without bootstrap dependency",
 	version: "1.0.2",
 	git: "https://github.com/maxharris9/maxharris9-datepicker.git"
 });
