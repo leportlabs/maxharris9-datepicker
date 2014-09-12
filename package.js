@@ -1,7 +1,7 @@
 Package.describe({
 	summary: "Native date picker without dependencies",
-	version: "1.0.1",
-	git: " \* Fill me in! *\ "
+	version: "1.0.2",
+	git: "https://github.com/maxharris9/maxharris9-datepicker.git"
 });
 
 Package.onUse(function(api) {
