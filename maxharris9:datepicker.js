@@ -36,7 +36,7 @@ var parseDate = function (date) {
 	};
 }
 
-var encodeDate = function (day, month, year) {
+encodeDate = function (day, month, year) {
 	return month + '/' + day + '/' + year;
 }
 

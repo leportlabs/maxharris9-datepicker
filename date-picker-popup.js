@@ -1,3 +1,9 @@
+var directionEnum = {
+	"prevYear": -1,
+	"nextYear": 1
+};
+Object.freeze(directionEnum);
+
 var clamp = function (number, min, max) {
 	return Math.min(Math.max(number, min), max);
 };
@@ -111,11 +117,8 @@ Template.datePickerPopup.helpers({
 Template.datePickerPopup.events({
 	'click .calendarDay': function (event, template) {
 		if (template.data) {
-			console.log(decodeId(event.target.id));
-
 			var date = decodeId(event.target.id);
-			var dateString = date.month + '/' + date.day + '/' + date.year;
-			Template.parentData(1).currentDate = dateString;
+			Template.parentData(1).currentDate = encodeDate(date.day, date.month, date.year);
 
 			Template.parentData(1).month = date.month;
 			Template.parentData(1).day = date.day;
@@ -127,7 +130,7 @@ Template.datePickerPopup.events({
 	},
 	'click .prevMonth': function (event, template) {
 		if (template.data) {
-			var newDate = flowIntoAdjacentYear(template.data.month, template.data.year, -1, 12);
+			var newDate = flowIntoAdjacentYear(template.data.month, template.data.year, directionEnum.prevYear, 12);
 
 			template.data.month = newDate.month;
 			template.data.year = newDate.year;
@@ -138,7 +141,7 @@ Template.datePickerPopup.events({
 	},
 	'click .nextMonth': function (event, template) {
 		if (template.data) {
-			var newDate = flowIntoAdjacentYear(template.data.month, template.data.year, 1, 1);
+			var newDate = flowIntoAdjacentYear(template.data.month, template.data.year, directionEnum.nextYear, 1);
 
 			template.data.month = newDate.month;
 			template.data.year = newDate.year;
