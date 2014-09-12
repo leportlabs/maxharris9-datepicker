@@ -13,8 +13,6 @@ CalendarTest = (function () {
 				return _tests[key];
 			},
 			renderTextCalendar: function (key) {
-				var calItems = this.getTest(key);
-
 				var padLeft = function (number, padLength, padChar) {
 					var stringRep = number + "";
 					while (stringRep.length < padLength) {
@@ -23,26 +21,7 @@ CalendarTest = (function () {
 					return stringRep;
 				};
 
-				var output = [];
-				var endHere = calItems.startingDay + calItems.monthLength;
-				var i = 0;
-
-				while (i < endHere) {
-					if (0 === (i % 7)) {
-						output.push("\n");
-					}
-					if (i < calItems.startingDay) {
-						output.push("   ");
-					}
-					else {
-						var day = i - calItems.startingDay + 1;
-						output.push(padLeft(day, 3, " "));
-					}
-					i += 1;
-				}
-				output.push("\n");
-
-				return output.join('');
+				return renderCalendar(this.getTest(key), "", "\n", "   ", function (day) { return padLeft(day, 3, " "); }, "\n");
 			}
 		};
 	};

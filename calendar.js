@@ -2,6 +2,31 @@ var encodeId = function (day, month, year, guid) {
 	return month + '-' + day + '-' + year + '-' + guid;
 };
 
+renderCalendar = function (calItems, pre, newRow, blank, filledDateFunc, post) {
+	var output = [];
+	var endHere = calItems.startingDay + calItems.monthLength;
+	var i = 0;
+
+	output.push(pre);
+
+	while (i < endHere) {
+		if (0 === (i % 7)) {
+			output.push(newRow);
+		}
+		if (i < calItems.startingDay) {
+			output.push(blank);
+		}
+		else {
+			var day = i - calItems.startingDay + 1;
+			output.push(filledDateFunc(day));
+		}
+		i += 1;
+	}
+	output.push(post);
+
+	return output.join('');
+};
+
 Calendar = (function () {
 	return function (day, month, year, guid) {
 		var _day = day; // day could be used to mark the highlighted date - not helpful in calculating the calendar
@@ -38,28 +63,7 @@ Calendar = (function () {
 
 		return {
 			renderHtmlCalendar: function () {
-				var output = [];
-				var endHere = _calItems.startingDay + _calItems.monthLength;
-				var i = 0;
-
-				output.push("<tr>");
-
-				while (i < endHere) {
-					if (0 === (i % 7)) {
-						output.push("<tr>");
-					}
-					if (i < _calItems.startingDay) {
-						output.push("<td></td>");
-					}
-					else {
-						var day = i - _calItems.startingDay + 1;
-						output.push("<td class='day calendarDay' id='" + encodeId(day, _month,  _year, _guid) + "'>" + day + "</td>");
-					}
-					i += 1;
-				}
-				output.push("<tr>");
-
-				return output.join('');
+				return renderCalendar(_calItems, "<tr>", "<tr>", "<td></td>", function (day) { return "<td class='day calendarDay' id='" + encodeId(day, _month,  _year, _guid) + "'>" + day + "</td>"; }, "<tr>");
 			},
 			__getTestState__: function () {
 				return _calItems;
