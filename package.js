@@ -18,11 +18,10 @@ Package.onUse(function(api) {
 
 	api.add_files('calendar-test.js', 'client');
 
-	api.add_files('state-machine.js', 'client');
 	api.add_files('date-picker-popup.html', 'client');
 	api.add_files('date-picker-popup.js', 'client');
 
-	api.export(['Calendar', 'testGetWeekDay', 'testYear', 'fillCalendar', 'testCalendarGenerator', 'generateTextCalendar', 'printTest'], 'client');
+	api.export(['Calendar', 'CalendarTest'], 'client');
 });
 
 Package.onTest(function(api) {
