@@ -1,42 +1,29 @@
-var encodeId = function (month, day, year, guid) {
+var encodeId = function (day, month, year, guid) {
 	return month + '-' + day + '-' + year + '-' + guid;
 };
 
 Calendar = (function () {
 	return function (day, month, year, guid) {
-		var _day = day; // this could be used to mark the highlighted date - don't use this to calculate the calendar
+		var _day = day; // day could be used to mark the highlighted date - not helpful in calculating the calendar
 		var _month = month;
 		var _year = year;
 		var _guid = guid;
 
-		// inspired by http://stackoverflow.com/questions/18664548/print-a-12-month-calendar-with-only-input-being-the-year-using-c
-		var _getWeekDay = function (day, month, year) {
-			// return the day of the week for particular date. sunday: 0, monday: 1, tuesday: 2, ... saturday: 6
-			var a = Math.floor((14 - month) / 12); // we need to simulate integer divisions to truncate results
-			var y = Math.floor(year - a);
-			var m = Math.floor(month + (12 * a) - 2);
+		var _getWeekDay = function () {
+			// inspired by http://stackoverflow.com/questions/18664548/print-a-12-month-calendar-with-only-input-being-the-year-using-c
+			var a = Math.floor((14 - _month) / 12); // Math.floor simulates integer divisions
+			var y = Math.floor(_year - a);
+			var m = Math.floor(_month + (12 * a) - 2);
 
-			var thing = Math.floor((31 * m) / 12);
-			var fourth = Math.floor(y / 4);
-			var hundredth = Math.floor(y / 100);
+			var mysteriousTerm = Math.floor((31 * m) / 12);
+			var leapDayCount = Math.floor(y / 4); // number of leap days since March 1st, xx00?
+			var centuryOffset = Math.floor(y / 100); // century offset?
 			var fourHundredth = Math.floor(y / 400);
 
-			return (day + y + fourth - hundredth + fourHundredth + thing) % 7;
+			// return the day of the week for particular date. sunday: 0, monday: 1, tuesday: 2, ... saturday: 6
+			return (1 + y + leapDayCount - centuryOffset + fourHundredth + mysteriousTerm) % 7;
 		};
-		var _generateCalendar = function (startingDay, monthLength) {
-			var output = [];
 
-			output.push(
-				_.map(_.range(0, startingDay), function () { return ""; } )
-			);
-			output.push(
-				_.map(_.range(0, monthLength), function (date) {
-					return date + 1;
-				} )
-			);
-
-			return _.flatten(output);
-		};
 		var _fillCalendar = function () {
 			var monthLengths = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
@@ -44,41 +31,38 @@ Calendar = (function () {
 				monthLengths[1] = 29; // leap years add a day to February
 			}
 
-			return _generateCalendar(_getWeekDay(1, _month, _year), monthLengths[_month - 1]);
+			return { startingDay: _getWeekDay(), monthLength: monthLengths[_month - 1] };
 		};
+
 		var _calItems = _fillCalendar();
 
 		return {
 			renderHtmlCalendar: function () {
 				var output = [];
+				var endHere = _calItems.startingDay + _calItems.monthLength;
+				var i = 0;
+
 				output.push("<tr>");
 
-				output.push(
-					_.map(_calItems, function (day, i) {
-						var output = [];
-						if (0 === (i % 7)) {
-							output.push("<tr>");
-						}
-
-						if (day === "") {
-							output.push("<td></td>");
-						}
-						else {
-							output.push("<td class='day calendarDay' id='" + encodeId(_month, day, _year, _guid) + "'>" + day + "</td>");
-						}
-
-						return output;
-					})
-				);
+				while (i < endHere) {
+					if (0 === (i % 7)) {
+						output.push("<tr>");
+					}
+					if (i < _calItems.startingDay) {
+						output.push("<td></td>");
+					}
+					else {
+						var day = i - _calItems.startingDay + 1;
+						output.push("<td class='day calendarDay' id='" + encodeId(day, _month,  _year, _guid) + "'>" + day + "</td>");
+					}
+					i += 1;
+				}
 				output.push("<tr>");
 
-				return _.flatten(output).join('');
+				return output.join('');
 			},
-			__getTestArray__: function () {
+			__getTestState__: function () {
 				return _calItems;
-			},
-			__getTestWeekDay__: function (day, month, year) {
-				return _getWeekDay(1, month, year);
 			}
 		};
 	};
