@@ -21,7 +21,7 @@ Package.onUse(function(api) {
 	api.add_files('date-picker-popup.html', 'client');
 	api.add_files('date-picker-popup.js', 'client');
 
-	api.export(['Calendar', 'CalendarTest'], 'client');
+	api.export(['Calendar', 'CalendarTest', 'testCalendarGenerator'], 'client');
 });
 
 Package.onTest(function(api) {
