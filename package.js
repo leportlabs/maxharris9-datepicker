@@ -13,8 +13,8 @@ Package.onUse(function(api) {
 	api.add_files('maxharris9:datepicker.html', 'client');
 
 	api.add_files('tracked-items.js', 'client');
-	api.add_files('calendar.js', 'client');
 	api.add_files('maxharris9:datepicker.js', 'client');
+	api.add_files('calendar.js', 'client');
 
 	api.add_files('calendar-test.js', 'client');
 
