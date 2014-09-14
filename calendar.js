@@ -1,34 +1,5 @@
-var encodeId = function (day, month, year, guid) {
-	return month + '-' + day + '-' + year + '-' + guid;
-};
-
-renderCalendar = function (calItems, pre, newRow, blank, filledDateFunc, post) {
-	var output = [];
-	var endHere = calItems.startingDay + calItems.monthLength;
-	var i = 0;
-
-	output.push(pre);
-
-	while (i < endHere) {
-		if (0 === (i % 7)) {
-			output.push(newRow);
-		}
-
-		if (i < calItems.startingDay) {
-			output.push(blank);
-		}
-		else {
-			var day = i - calItems.startingDay + 1;
-			output.push(filledDateFunc(day));
-		}
-		i += 1;
-	}
-	output.push(post);
-
-	return output.join('');
-};
-
 Calendar = (function () {
+	"use strict";
 	return function (day, month, year, guid) {
 		var _day = day; // TODO: use day to mark the current day in the calendar HTML we emit
 		var _month = month;
@@ -63,17 +34,56 @@ Calendar = (function () {
 			return { startingDay: _getWeekDay(), monthLength: monthLengths[_month - 1] };
 		};
 
+		var _renderCalendar = function (calItems, pre, newRow, blank, filledDateFunc, post) {
+			var output = [];
+			var endHere = calItems.startingDay + calItems.monthLength;
+			var i = 0;
+
+			output.push(pre);
+
+			while (i < endHere) {
+				if (0 === (i % 7)) {
+					output.push(newRow);
+				}
+
+				if (i < calItems.startingDay) {
+					output.push(blank);
+				}
+				else {
+					var day = i - calItems.startingDay + 1;
+					output.push(filledDateFunc(day));
+				}
+				i += 1;
+			}
+			output.push(post);
+
+			return output.join('');
+		};
+
 		var _calItems = _fillCalendar();
 
 		return {
 			renderHtmlCalendar: function () {
-				return renderCalendar(
+				return _renderCalendar(
 					_calItems,
 					"<tr>",
 					"<tr>",
 					"<td></td>",
-					function (day) { return "<td class='day calendarDay' id='" + encodeId(day, _month,  _year, _guid) + "'>" + day + "</td>"; },
+					function (day) {
+						var dateParts = SimpleDate(day, _month,  _year, _guid);
+						return "<td class='day calendarDay' id='" + dateParts.encodeId() + "'>" + day + "</td>"; },
 					"<tr>");
+			},
+			renderTextCalendar: function () {
+				var padLeft = function (number, padLength, padChar) {
+					var stringRep = number + "";
+					while (stringRep.length < padLength) {
+						stringRep = padChar + stringRep;
+					}
+					return stringRep;
+				};
+
+				return _renderCalendar(_calItems, "", "\n", "   ", function (day) { return padLeft(day, 3, " "); }, "\n");
 			},
 			__getTestState__: function () {
 				return _calItems;

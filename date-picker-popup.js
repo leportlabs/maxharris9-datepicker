@@ -1,47 +1,8 @@
-var directionEnum = {
+directionEnum = {
 	"prevYear": -1,
 	"nextYear": 1
 };
 Object.freeze(directionEnum);
-
-var clamp = function (number, min, max) {
-	return Math.min(Math.max(number, min), max);
-};
-
-var clampYear = function (year) {
-	return clamp(year, 0, 2500);
-};
-
-var clampMonth = function (month) {
-	return clamp(month, 1, 12);
-};
-
-var flowIntoAdjacentYear = function (month, year, direction, overflowMonth) {
-	var newMonth = clampMonth(month + direction);
-
-	if (newMonth === month) { // if the month hasn't changed, we know we started with January or December
-		return {
-			month: overflowMonth,
-			year: clampYear(year + direction) // in that case, flow to the previous or next year, depending on our direction
-		};
-	}
-
-	return { // default case: switch to adjacent month, without changing the year
-		month: newMonth,
-		year: year
-	};
-};
-
-var decodeId = function (id) {
-	var tokenizedId = id.split('-');
-
-	return {
-		'month': parseInt(tokenizedId[0]),
-		'day': parseInt(tokenizedId[1]),
-		'year': parseInt(tokenizedId[2]),
-		'guid': tokenizedId[3]
-	};
-};
 
 var allMonths = [
 	{ 'month': "Jan" },
@@ -69,16 +30,24 @@ var allWeekdays = [
 ];
 
 Template.datePickerPopup.helpers({
-	setup: function (parentUpdateCallback, parentView, x, y, anchorElement, month, day, year) {
-		var renderedView = Blaze.renderWithData(Template.datePickerPopup, { 'x': x, 'y': y, 'month': month, 'day': day, 'year': year, 'guid': generateGuid(), 'parentUpdateCallback': parentUpdateCallback }, anchorElement, undefined, parentView );
+	setup: function (parentUpdateCallback, parentView, x, y, anchorElement, theDate) {
+		var dataContext = {
+			'x': x,
+			'y': y,
+			'theDate': theDate,
+			'guid': generateGuid(),
+			'parentUpdateCallback': parentUpdateCallback
+		};
 
-		renderedView.dataVar.curValue.renderedView = renderedView; // store a reference so that the remove helper can destroy the right instance
+		var renderedView = Blaze.renderWithData(Template.datePickerPopup, dataContext, anchorElement, undefined, parentView );
+
+		// WTF - why do I seem to need to store a reference so that the remove helper can destroy the right instance?
+		renderedView.dataVar.curValue.renderedView = renderedView; // I must be doing something wrong, but I know not what.
 
 		return renderedView;
 	},
 	remove: function () {
 		Template.parentData(1).openedState = false;
-		console.log('Template.instance():', Template.instance());
 		Blaze.remove(Template.instance().data.renderedView);
 	},
 	weekdays: function () {
@@ -91,20 +60,20 @@ Template.datePickerPopup.helpers({
 		ti.depend('month');
 		ti.depend('year');
 		return wrapTemplateInstance(function (data) {
-			var cal = Calendar(data.day, data.month, data.year, data.guid);
+			var cal = Calendar(data.theDate.getDay(), data.theDate.getMonth(), data.theDate.getYear(), data.guid);
 			return cal.renderHtmlCalendar();
 		});
 	},
 	selectedMonth: function () {
 		ti.depend('month');
 		return wrapTemplateInstance(function (data) {
-			return allMonths[data.month - 1].month;
+			return allMonths[data.theDate.getMonth() - 1].month;
 		});
 	},
 	selectedYear: function () {
 		ti.depend('year');
 		return wrapTemplateInstance(function (data) {
-			return data.year;
+			return data.theDate.getYear();
 		});
 	},
 	getStyle: function () {
@@ -117,12 +86,10 @@ Template.datePickerPopup.helpers({
 Template.datePickerPopup.events({
 	'click .calendarDay': function (event, template) {
 		if (template.data) {
-			var date = decodeId(event.target.id);
-			Template.parentData(1).currentDate = encodeDate(date.day, date.month, date.year);
+			var newlySelectedDate = SimpleDate();
+			newlySelectedDate.decodeId(event.target.id);
 
-			Template.parentData(1).month = date.month;
-			Template.parentData(1).day = date.day;
-			Template.parentData(1).year = date.year;
+			Template.parentData(1).theDate = newlySelectedDate; // reach into parent data context, and stuff in our updated date information
 
 			template.data.parentUpdateCallback();
 			Template.datePickerPopup.remove();
@@ -130,10 +97,7 @@ Template.datePickerPopup.events({
 	},
 	'click .prevMonth': function (event, template) {
 		if (template.data) {
-			var newDate = flowIntoAdjacentYear(template.data.month, template.data.year, directionEnum.prevYear, 12);
-
-			template.data.month = newDate.month;
-			template.data.year = newDate.year;
+			template.data.theDate.flowIntoAdjacentYear(directionEnum.prevYear, 12);
 
 			ti.changed('month');
 			ti.changed('year');
@@ -141,10 +105,7 @@ Template.datePickerPopup.events({
 	},
 	'click .nextMonth': function (event, template) {
 		if (template.data) {
-			var newDate = flowIntoAdjacentYear(template.data.month, template.data.year, directionEnum.nextYear, 1);
-
-			template.data.month = newDate.month;
-			template.data.year = newDate.year;
+			template.data.theDate.flowIntoAdjacentYear(directionEnum.nextYear, 1);
 
 			ti.changed('month');
 			ti.changed('year');
@@ -152,13 +113,14 @@ Template.datePickerPopup.events({
 	},
 	'click .decYear': function (event, template) {
 		if (template.data) {
-			template.data.year = clampYear(template.data.year - 1);
+			template.data.theDate.setYear(template.data.theDate.getYear() - 1); // writing incYear and decYear methods isn't warranted yet
 			ti.changed('year');
 		}
 	},
 	'click .incYear': function (event, template) {
 		if (template.data) {
-			template.data.year = clampYear(template.data.year + 1);
+			template.data.theDate.setYear(template.data.theDate.getYear() + 1);
+
 			ti.changed('year');
 		}
 	}

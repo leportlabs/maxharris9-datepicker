@@ -11,17 +11,6 @@ CalendarTest = (function () {
 			},
 			getTest: function (key) {
 				return _tests[key];
-			},
-			renderTextCalendar: function (key) {
-				var padLeft = function (number, padLength, padChar) {
-					var stringRep = number + "";
-					while (stringRep.length < padLength) {
-						stringRep = padChar + stringRep;
-					}
-					return stringRep;
-				};
-
-				return renderCalendar(this.getTest(key), "", "\n", "   ", function (day) { return padLeft(day, 3, " "); }, "\n");
 			}
 		};
 	};
@@ -222,12 +211,6 @@ testCalendarGenerator = function () {
 		});
 	};
 
-	// print the calendars - run this when adding new test calendar data to check for accuracy
-	// iterateCalTest(function (key) {
-	// 	console.log(key + '\n' + calTest.renderTextCalendar(key));
-	// } );
-
-	// actually check the calendars
 	iterateCalTest(function (key, month, year) { // this is called last so that errors don't get buried in the log
 		var cal = Calendar(1, month, year, 'testguid0');
 		console.assert(_.isEqual(cal.__getTestState__(), calTest.getTest(key)), 'Calendar generation for ' + key + ' failed');
