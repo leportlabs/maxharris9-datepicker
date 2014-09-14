@@ -3,25 +3,41 @@ body {
 	font-weight: 300;
 }
 
-.datepicker-ex {
+.datepicker {
 	padding: 15px;
 	border-radius: 0px;
 	direction: ltr;
 	line-height: 2;
 }
 
-.datepicker-ex.dropdown-menu-ex {
+.stacked-buttons {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    line-height: 0;
+}
+
+.spinbox-button {
+	height: 15px;
+	color: white;
+	-webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: gray;
+}
+
+.prevMonth, .nextMonth {
+	color: white;
+	-webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: gray;
+}
+
+.datepicker.dropdown-menu {
 	position: absolute;
-	top: 100%;
-	left: 0;
 	z-index: 1000;
 	float: left;
-	display: none;
 	min-width: 160px;
 	list-style: none;
 	background-color: #ffffff;
 	border: none;
-	border-radius: 0px;
 
 	-webkit-filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.125));
 	-moz-filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.125));
@@ -42,22 +58,22 @@ body {
 	cursor: default;
 }
 
-.datepicker-ex td {
+.datepicker td {
 	width: 35px;
 	text-align: center;
 }
 
-.datepicker-ex th {
+.datepicker th {
 	text-align: center;
 }
 
-.datepicker-ex table tr td.day:hover,
-.datepicker-ex table tr td.day.focused {
+.datepicker table tr td.day:hover,
+.datepicker table tr td.day.focused {
 	background: #eeeeee;
 	cursor: pointer;
 }
 
-.datepicker-ex.dropdown-menu-ex:after {
+.datepicker.dropdown-menu:after {
 	bottom: 100%;
 	left: 20px;
 	border: solid transparent;
@@ -66,7 +82,6 @@ body {
 	width: 0;
 	position: absolute;
 	pointer-events: none;
-	border-color: none;
 	border-bottom-color: #ffffff;
 	border-width: 15px;
 	margin-left: -15px;
