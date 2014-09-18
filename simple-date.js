@@ -23,12 +23,19 @@ SimpleDate = (function () {
 
 		return {
 			parse: function (date) {
-				var dateParts = date.split('/');
+				if (date) {
+					var dateParts = date.split('/');
 
-				if (3 === dateParts.length) {
-					_month = parseInt(dateParts[0], 10);
-					_day = parseInt(dateParts[1], 10);
-					_year = parseInt(dateParts[2], 10);
+					if (3 === dateParts.length) {
+						_month = parseInt(dateParts[0], 10);
+						_day = parseInt(dateParts[1], 10);
+						_year = parseInt(dateParts[2], 10);
+					}
+				}
+				else {
+					_month = 1;
+					_day = 1;
+					_year = 2000;
 				}
 			},
 			getStringEncoding: function () {
