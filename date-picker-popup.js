@@ -30,10 +30,9 @@ var allWeekdays = [
 ];
 
 Template.datePickerPopup.helpers({
-	setup: function (parentUpdateCallback, parentView, x, y, anchorElement, theDate) {
+	setup: function (parentUpdateCallback, parentView, popupOffset, anchorElement, theDate) {
 		var dataContext = {
-			'x': x,
-			'y': y,
+			'popupOffset': popupOffset,
 			'theDate': theDate,
 			'guid': generateGuid(),
 			'parentUpdateCallback': parentUpdateCallback
@@ -78,7 +77,7 @@ Template.datePickerPopup.helpers({
 	},
 	getStyle: function () {
 		return wrapTemplateInstance(function (data) {
-			return { style: "display: block; top: " + data.y + "px; left: " + data.x + "px;" };
+			return { style: "display: block; top: " + data.popupOffset.top + "px; left: " + data.popupOffset.left + "px;" };
 		});
 	}
 });
