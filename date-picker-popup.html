@@ -1,28 +1,28 @@
 <template name="datePickerPopup">
-	<div class="datepicker dropdown-menu unselectable" {{getStyle}}>
-		<div class="datepicker-days" style="display: block;">
-			<table class=" table-condensed">
-				<thead>
-					<tr>
-						<th class="prevMonth"><i class="fa fa-chevron-left"></i></th>
-						<th colspan="5">{{selectedMonth}} {{selectedYear}}
-							<div class="stacked-buttons">
-								<i class="fa fa-plus-circle incYear spinbox-button"></i>
-								<i class="fa fa-minus-circle decYear spinbox-button"></i>
-							</div>
-						</th>
-						<th class="nextMonth"><i class="fa fa-chevron-right"></i></th>
-					</tr>
-					<tr>
-						{{#each weekdays}}
-							<th class="dow">{{weekday}}</th>
-						{{/each}}
-					</tr>
-				</thead>
-				<tbody>
-					{{{calendarHtml}}}
-				</tbody>
-			</table>
-		</div>
+	<div class="picker picker__date unselectable" {{getStyle}}>
+		<h1 class="picker--title picker__date--title">
+			<span>
+				<i class="fa fa-angle-up nextMonth"></i> 
+				<i class="fa fa-angle-down prevMonth"></i>
+				{{selectedMonth}} 
+			</span>
+			<span>
+				{{selectedYear}}
+				<i class="fa fa-angle-up incYear"></i>
+				<i class="fa fa-angle-down decYear"></i>
+			</span>		
+		</h1>
+		<table class="picker__date--cal-table">
+			<thead>
+				<tr class="picker__date--cal-dows">
+					{{#each weekdays}}
+						<th class="picker__date--cal-dow">{{weekday}}</th>
+					{{/each}}
+				</tr>
+			</thead>
+			<tbody>
+				{{{calendarHtml}}}
+			</tbody>
+		</table>
 	</div>
 </template>

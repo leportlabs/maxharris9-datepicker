@@ -8,8 +8,8 @@ Package.onUse(function(api) {
 	api.versionsFrom('METEOR@0.9.1');
 	api.use(['standard-app-packages', 'tracker', 'templating', 'underscore', 'maxharris9:template-instance-utils', 'pfafman:font-awesome-4', 'mongo-livedata'], 'client');
 
-	api.add_files('maxharris9:datepicker.css', 'client');
-	api.add_files('date-picker-popup.css', 'client');
+	api.add_files('../../public/css/package-components/datepicker.css', 'client');
+
 	api.add_files('maxharris9:datepicker.html', 'client');
 
 	api.add_files('simple-date.js', 'client');
