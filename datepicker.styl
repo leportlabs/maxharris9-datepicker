@@ -1,0 +1,205 @@
+// last modified by: Chris
+// last modified: 2014-09-26 15:37:43
+// description: 
+
+@import "../../stylus/base/base-helpers/*";
+
+$DATEPICKER-WIDTH = 30rem;
+
+.picker__date {
+	width: $DATEPICKER-WIDTH;
+	max-height: 35.5rem;
+	overflow-y: scroll;
+	&--title {
+		position: relative;
+		z-index: 2;
+		width: 100%;
+		&__active {
+			padding-top: 0.2em;
+			background: #FFF;
+		}
+	}
+	&--nav-icons.fa-stack {
+		width: 1em;
+		height: 1em;
+		line-height: 1em;
+		margin-top: 0.75em;
+		.fa-stack-1x {
+			line-height: 0.5em;
+			height: 0.5em;
+			&:first-of-type {
+				bottom: 95%;
+			}
+		}
+	}
+	&--cal-table {
+		width: 100%;
+		text-align: center;
+		color: $body-text-color;
+		> tbody {
+			padding: 0 2em;
+			> tr > td {
+				line-height: 3;
+				transition: all 0.5s ease-in;
+			}
+		}
+	}
+	&--cal-dows {
+		line-height: 1;
+	}
+	&--cal-dow {
+		font-family: $avenir-roman;
+		text-align: center;
+		color: $body-text-color;
+	}
+	&--cals {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+}
+
+.picker__date--cals {
+	&__day-active {
+		.picker__date--cal {
+			width: 100%;
+			&__active {
+				.picker__date--title {
+					display: none;
+				}
+			}
+		}
+		td.day:hover {
+			cursor: pointer;
+			color: $sky-blue;
+		}
+	}
+	&__month-active,
+	&__year-active {
+		padding: 0 1em 1em;
+		justify-content: space-between;
+		.picker__date--cal-dow,
+		.picker__date--cal-table {
+			color: $gray;
+		}
+		.picker__date--cal:hover {
+			cursor: pointer;
+			.picker__date--cal-table {
+				color: lighten($sky-blue, 10%);
+			}
+			.picker__date--title {
+				color: $sky-blue;
+			}
+		}
+	}
+	&__month-active {
+		.picker__date--cal {
+			position: relative;
+			width: calc(100% / 3.2);
+			margin-bottom: 0.8em;
+			.picker__date--title {
+				position: absolute;
+				width: 100%;
+				top: 25%;
+				font-size: 1em;
+			}
+		}
+		.picker__date--cal-table {
+			font-size: 0.2em;
+			margin-bottom: 1em;
+		}
+	}
+	&__year-active {
+		.picker__date--cal {
+			width: calc(100% / 6.1);
+			margin-bottom: 0.1em;
+			.picker__date--title {
+				display: none;
+			}
+			&__active {
+				.picker__date--title {
+					display: block;
+					position: absolute;
+					width: calc(100% - 2em);
+					font-size: 1.5em;
+					&__day-span,
+					&__month-span {
+						display: none;
+					}
+				}
+			}
+		}
+		.picker__date--cal-table {
+			font-size: 0.1em;
+			margin-bottom: 0.2em;
+		}
+	}
+}
+
+$SECTIONS = "day", "month", "year";
+
+for $item in $SECTIONS {
+	.picker__date--title__active {
+		&__{$item}-active {
+      		.picker__date--title__{$item}-span {
+        		color: $sky-blue
+      		}
+		}
+	}
+}
+
+.stacked-buttons {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    line-height: 0;
+}
+
+.spinbox-button {
+	height: 15px;
+	color: white;
+	-webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: gray;
+}
+
+.prevMonth, .nextMonth {
+	color: white;
+	-webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: gray;
+}
+
+.unselectable {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	cursor: default;
+}
+
+.datepicker td {
+	width: 35px;
+	text-align: center;
+}
+
+.datepicker th {
+	text-align: center;
+}
+
+.datepicker table tr td.day:hover,
+.datepicker table tr td.day.focused {
+	background: #eeeeee;
+	cursor: pointer;
+}
+
+.datepicker.dropdown-menu:after {
+	bottom: 100%;
+	left: 20px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-bottom-color: #ffffff;
+	border-width: 15px;
+	margin-left: -15px;
+}
