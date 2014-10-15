@@ -6,7 +6,7 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.versionsFrom('METEOR@0.9.1');
-	api.use(['standard-app-packages', 'tracker', 'templating', 'underscore', 'maxharris9:template-instance-utils', 'pfafman:font-awesome-4', 'mongo-livedata', 'stylus'], 'client');
+	api.use(['standard-app-packages', 'tracker', 'templating', 'underscore', 'maxharris9:template-instance-utils', 'pfafman:font-awesome-4', 'mongo-livedata', 'mquandalle:stylus'], 'client');
 
 	api.add_files('datepicker.styl', 'client');
 

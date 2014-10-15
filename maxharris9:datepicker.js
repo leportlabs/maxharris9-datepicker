@@ -1,21 +1,22 @@
 ti = TrackedItems();
 var renderedView;
 
+Template.datePicker.setup = function (currentDate, topSaveCallback, elementId, popupOffset) {
+	var domElement = document.getElementById(elementId);
+	var originalDate = SimpleDate();
+	originalDate.parse(currentDate);
+
+	var dataContext = {
+		'topSaveCallback': topSaveCallback,
+		'theDate': originalDate,
+		'guid': generateGuid(),
+		'popupOffset': popupOffset
+	};
+
+	renderedView = Blaze.renderWithData(Template.datePicker, dataContext, domElement);
+};
+
 Template.datePicker.helpers({
-	setup: function (currentDate, saveCallback, elementId, popupOffset) {
-		var domElement = document.getElementById(elementId);
-		var originalDate = SimpleDate();
-		originalDate.parse(currentDate);
-
-		var dataContext = {
-			'saveCallback': saveCallback,
-			'theDate': originalDate,
-			'guid': generateGuid(),
-			'popupOffset': popupOffset
-		};
-
-		renderedView = Blaze.renderWithData(Template.datePicker, dataContext, domElement);
-	},
 	currentDate: function () {
 		ti.depend('currentDateDep');
 		return wrapTemplateInstance(function (data) {
@@ -50,8 +51,9 @@ Template.datePicker.events({
 				return;
 			}
 
-			var saveCallback = function () {
-				template.data.saveCallback(template.data.theDate.getStringEncoding());
+			var saveCallback = function (newlySelectedDate) {
+				template.data.theDate = newlySelectedDate;
+				template.data.topSaveCallback(template.data.theDate.getStringEncoding());
 				ti.changed('currentDateDep');
 
 				template.data.openedState = false;

@@ -29,25 +29,27 @@ var allWeekdays = [
 	{ 'weekday': "Sat" }
 ];
 
+Template.datePickerPopup.setup = function (parentUpdateCallback, parentView, popupOffset, anchorElement, theDate) {
+	var dataContext = {
+		'popupOffset': popupOffset,
+		'theDate': theDate,
+		'guid': generateGuid(),
+		'parentUpdateCallback': parentUpdateCallback
+	};
+
+	var renderedView = Blaze.renderWithData(Template.datePickerPopup, dataContext, anchorElement, undefined, parentView );
+
+	// WTF - why do I seem to need to store a reference so that the remove helper can destroy the right instance?
+	renderedView.dataVar.curValue.renderedView = renderedView; // I must be doing something wrong, but I know not what.
+
+	return renderedView;
+};
+
 Template.datePickerPopup.helpers({
-	setup: function (parentUpdateCallback, parentView, popupOffset, anchorElement, theDate) {
-		var dataContext = {
-			'popupOffset': popupOffset,
-			'theDate': theDate,
-			'guid': generateGuid(),
-			'parentUpdateCallback': parentUpdateCallback
-		};
-
-		var renderedView = Blaze.renderWithData(Template.datePickerPopup, dataContext, anchorElement, undefined, parentView );
-
-		// WTF - why do I seem to need to store a reference so that the remove helper can destroy the right instance?
-		renderedView.dataVar.curValue.renderedView = renderedView; // I must be doing something wrong, but I know not what.
-
-		return renderedView;
-	},
 	remove: function () {
-		Template.parentData(1).openedState = false;
-		Blaze.remove(Template.instance().data.renderedView);
+		return wrapTemplateInstance(function (data) {
+			Blaze.remove(data.renderedView);
+		});
 	},
 	weekdays: function () {
 		return allWeekdays;
@@ -88,9 +90,7 @@ Template.datePickerPopup.events({
 			var newlySelectedDate = SimpleDate();
 			newlySelectedDate.decodeId(event.target.id);
 
-			Template.parentData(1).theDate = newlySelectedDate; // reach into parent data context, and stuff in our updated date information
-
-			template.data.parentUpdateCallback();
+			template.data.parentUpdateCallback(newlySelectedDate);
 			Template.datePickerPopup.remove();
 		}
 	},
