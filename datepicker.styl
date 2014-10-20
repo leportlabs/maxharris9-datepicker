@@ -3,13 +3,34 @@
 // description: 
 
 @import "../../stylus/base/base-helpers/*";
+@import "../../stylus/base/base-components/base-picker.import";
 
 $DATEPICKER-WIDTH = 30rem;
+
+.ll-icon-stack {
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+	height: 1em;
+	width: 1em;
+	margin-top: -0.25em;
+	margin-left: 0.25em;
+	&--item {
+		position: absolute;
+		left: 0;
+		width: 30%;
+		&__first {
+			top: 0;
+		}
+		&__last {
+			bottom: 0;
+		}
+	}
+}
 
 .picker__date {
 	width: $DATEPICKER-WIDTH;
 	max-height: 35.5rem;
-	overflow-y: scroll;
 	&--title {
 		position: relative;
 		z-index: 2;
@@ -17,6 +38,30 @@ $DATEPICKER-WIDTH = 30rem;
 		&__active {
 			padding-top: 0.2em;
 			background: #FFF;
+		}
+	}
+	&--arrow {
+		> g {
+			stroke: #000;
+		}
+		&__left,
+		&__right {
+			position: absolute;
+			top: 35%;
+			height: 0.6em;
+		}
+		&__left {
+			left: 0.5em;
+			transform: rotate(180deg);
+		}
+		&__right {
+			right: 0.5em;
+		}
+		&__bottom {
+			transform: rotate(90deg);
+		}
+		&__top {
+			transform: rotate(-90deg);
 		}
 	}
 	&--nav-icons.fa-stack {

@@ -1,7 +1,8 @@
 <template name="datePicker">
-	<div>
-		<div id="date-picker-popup-anchor-{{guid}}"></div>
+	<div id="datePickerOff" class="{{#if datePickerOpen}}click-off-bg{{/if}}"></div>
+	<p>
 		{{currentDate}}
+		<span id="date-picker-popup-anchor-{{guid}}"></span>
 		<i id="date-picker-calendar-button-{{guid}}" class="openButton fa fa-calendar-o"></i>
-	</div>
+	</p>
 </template>
