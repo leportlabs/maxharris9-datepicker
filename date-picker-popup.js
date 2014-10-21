@@ -29,6 +29,8 @@ var allWeekdays = [
 	{ 'weekday': "Sat" }
 ];
 
+var rv = new ReactiveVar();
+
 Template.datePickerPopup.setup = function (parentUpdateCallback, parentView, popupOffset, anchorElement, theDate) {
 	var dataContext = {
 		'popupOffset': popupOffset,
@@ -39,18 +41,15 @@ Template.datePickerPopup.setup = function (parentUpdateCallback, parentView, pop
 
 	var renderedView = Blaze.renderWithData(Template.datePickerPopup, dataContext, anchorElement, undefined, parentView );
 
-	// WTF - why do I seem to need to store a reference so that the remove helper can destroy the right instance?
-	renderedView.dataVar.curValue.renderedView = renderedView; // I must be doing something wrong, but I know not what.
+	rv.set(renderedView);
+
+//	// WTF - why do I seem to need to store a reference so that the remove helper can destroy the right instance?
+//	renderedView.dataVar.curValue.renderedView = renderedView; // I must be doing something wrong, but I know not what.
 
 	return renderedView;
 };
 
 Template.datePickerPopup.helpers({
-	remove: function () {
-		return wrapTemplateInstance(function (data) {
-			Blaze.remove(data.renderedView);
-		});
-	},
 	weekdays: function () {
 		return allWeekdays;
 	},
@@ -89,9 +88,11 @@ Template.datePickerPopup.events({
 		if (template.data) {
 			var newlySelectedDate = SimpleDate();
 			newlySelectedDate.decodeId(event.target.id);
+			//Blaze.remove(template.data.renderedView);
+			//Blaze.remove(rv.get());
 
 			template.data.parentUpdateCallback(newlySelectedDate);
-			Template.datePickerPopup.remove();
+			//Template.datePickerPopup.remove();
 		}
 	},
 	'click .prevMonth': function (event, template) {
