@@ -42,6 +42,12 @@ SimpleDate = (function () {
 				return _month + '/' + _day + '/' + _year;
 			},
 
+			compareWithSimpleDate: function (otherSimpleDate) {
+				return ((otherSimpleDate.getDay() === _day) &&
+					(otherSimpleDate.getMonth() === _month) &&
+					(otherSimpleDate.getYear() === _year));
+			},
+
 			getDay: function () {
 				return _day;
 			},

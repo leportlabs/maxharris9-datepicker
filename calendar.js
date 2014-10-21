@@ -1,10 +1,12 @@
 Calendar = (function () {
 	"use strict";
-	return function (day, month, year, guid) {
-		var _day = day; // TODO: use day to mark the current day in the calendar HTML we emit
-		var _month = month;
-		var _year = year;
+	return function (activeDate, originalDate, guid) {
+		var _day = activeDate.getDay();
+		var _month = activeDate.getMonth();
+		var _year = activeDate.getYear();
 		var _guid = guid;
+
+		var _originalDate = originalDate;
 
 		var _getWeekDay = function () {
 			// inspired by http://stackoverflow.com/questions/18664548/print-a-12-month-calendar-with-only-input-being-the-year-using-c
@@ -27,7 +29,7 @@ Calendar = (function () {
 		var _fillCalendar = function () {
 			var monthLengths = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 
-			if (year % 400 === 0 || ((year % 4 === 0) && (year % 100 !== 0))) {
+			if (activeDate.getYear() % 400 === 0 || ((activeDate.getYear() % 4 === 0) && (activeDate.getYear() % 100 !== 0))) {
 				monthLengths[1] = 29; // leap years add a day to February
 			}
 
@@ -71,7 +73,11 @@ Calendar = (function () {
 					"<td></td>",
 					function (day) {
 						var dateParts = SimpleDate(day, _month,  _year, _guid);
-						return "<td class='day calendarDay' id='" + dateParts.encodeId() + "'>" + day + "</td>"; },
+
+						// if we're iterating over the original day, add in a special class that highlights the existing day
+						var activeDayClass = dateParts.compareWithSimpleDate(_originalDate) ? 'day__active' : '';
+
+						return "<td class='day calendarDay " + activeDayClass + " id='" + dateParts.encodeId() + "'>" + day + "</td>"; },
 					"<tr>");
 			},
 			renderTextCalendar: function () {
