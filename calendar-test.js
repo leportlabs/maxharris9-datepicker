@@ -212,7 +212,7 @@ testCalendarGenerator = function () {
 	};
 
 	iterateCalTest(function (key, month, year) { // this is called last so that errors don't get buried in the log
-		var cal = Calendar(new SimpleDate(1, month, year), 'testguid0');
+		var cal = Calendar(SimpleDate(1, month, year), SimpleDate(1, month, year), 'testguid0');
 		console.assert(_.isEqual(cal.__getTestState__(), calTest.getTest(key)), 'Calendar generation for ' + key + ' failed');
 	} );
 };

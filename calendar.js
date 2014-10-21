@@ -77,7 +77,7 @@ Calendar = (function () {
 						// if we're iterating over the original day, add in a special class that highlights the existing day
 						var activeDayClass = dateParts.compareWithSimpleDate(_originalDate) ? 'day__active' : '';
 
-						return "<td class='day calendarDay " + activeDayClass + " id='" + dateParts.encodeId() + "'>" + day + "</td>"; },
+						return "<td class='day calendarDay " + activeDayClass + "' id='" + dateParts.encodeId() + "'>" + day + "</td>"; },
 					"<tr>");
 			},
 			renderTextCalendar: function () {
