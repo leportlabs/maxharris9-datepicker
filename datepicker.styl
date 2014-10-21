@@ -16,6 +16,15 @@ body {
 	font-size: 14px; //14px now equals 1em
 }
 
+.click-off-bg {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: transparent;
+}
+
 .picker {
 	display: block;
 	position: absolute;
@@ -131,8 +140,8 @@ body {
 		text-align: center;
 		color: $body-text-color;
 		> tbody {
-			padding: 0 2em;
 			> tr > td {
+				width: calc(100% / 7);
 				line-height: 3;
 				transition: all 0.5s ease-in;
 			}
