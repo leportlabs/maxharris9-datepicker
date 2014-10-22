@@ -1,7 +1,7 @@
 <template name="datePickerPopup">
 	<div class="picker picker__date unselectable" {{getStyle}}>
 		<h1 class="picker--title picker__date--title">
-			{{> arrowIcon contextClass="prevMonth picker__date--arrow picker__date--arrow__left"}}
+			{{> datepickerArrowIcon contextClass="prevMonth picker__date--arrow picker__date--arrow__left"}}
 			{{selectedMonth}} 
 			<!-- <span class="picker__date- -nav-icons fa-stack">
 				<i class="fa fa-angle-up fa-stack-1x nextMonth"></i> 
@@ -9,10 +9,10 @@
 			</span> -->
 			{{selectedYear}}
 			<span class="picker__date--nav-icons ll-icon-stack">
-				{{> arrowIcon contextClass="incYear ll-icon-stack--item ll-icon-stack--item__first picker__date--arrow picker__date--arrow__top"}}	
-				{{> arrowIcon contextClass="decYear ll-icon-stack--item ll-icon-stack--item__last picker__date--arrow picker__date--arrow__bottom"}}	
+				{{> datepickerArrowIcon contextClass="incYear ll-icon-stack--item ll-icon-stack--item__first picker__date--arrow picker__date--arrow__top"}}	
+				{{> datepickerArrowIcon contextClass="decYear ll-icon-stack--item ll-icon-stack--item__last picker__date--arrow picker__date--arrow__bottom"}}	
 			</span>	
-			{{> arrowIcon contextClass="nextMonth picker__date--arrow picker__date--arrow__right"}}	
+			{{> datepickerArrowIcon contextClass="nextMonth picker__date--arrow picker__date--arrow__right"}}	
 		</h1>
 		<table class="picker__date--cal-table">
 			<thead>
