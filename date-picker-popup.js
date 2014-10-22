@@ -29,28 +29,29 @@ var allWeekdays = [
 	{ 'weekday': "Sat" }
 ];
 
-Template.datePickerPopup.setup = function (parentUpdateCallback, parentView, popupOffset, anchorElement, theDate) {
+var rv = new ReactiveVar();
+
+Template.datePickerPopup.setup = function (parentUpdateCallback, parentView, popupOffset, anchorElement, activeDate) {
+	// make a copy of the activeDate so that it persists - this lets us have different markup for the currently selected date
+	var originalDate = SimpleDate();
+	originalDate.parse(activeDate.getStringEncoding());
+
 	var dataContext = {
-		'popupOffset': popupOffset,
-		'theDate': theDate,
-		'guid': generateGuid(),
-		'parentUpdateCallback': parentUpdateCallback
+		popupOffset: popupOffset,
+		activeDate: activeDate,
+		originalDate: originalDate,
+		guid: generateGuid(),
+		parentUpdateCallback: parentUpdateCallback
 	};
 
 	var renderedView = Blaze.renderWithData(Template.datePickerPopup, dataContext, anchorElement, undefined, parentView );
 
-	// WTF - why do I seem to need to store a reference so that the remove helper can destroy the right instance?
-	renderedView.dataVar.curValue.renderedView = renderedView; // I must be doing something wrong, but I know not what.
+	rv.set(renderedView);
 
 	return renderedView;
 };
 
 Template.datePickerPopup.helpers({
-	remove: function () {
-		return wrapTemplateInstance(function (data) {
-			Blaze.remove(data.renderedView);
-		});
-	},
 	weekdays: function () {
 		return allWeekdays;
 	},
@@ -61,20 +62,20 @@ Template.datePickerPopup.helpers({
 		ti.depend('month');
 		ti.depend('year');
 		return wrapTemplateInstance(function (data) {
-			var cal = Calendar(data.theDate.getDay(), data.theDate.getMonth(), data.theDate.getYear(), data.guid);
+			var cal = Calendar(data.activeDate, data.originalDate, data.guid);
 			return cal.renderHtmlCalendar();
 		});
 	},
 	selectedMonth: function () {
 		ti.depend('month');
 		return wrapTemplateInstance(function (data) {
-			return allMonths[data.theDate.getMonth() - 1].month;
+			return allMonths[data.activeDate.getMonth() - 1].month;
 		});
 	},
 	selectedYear: function () {
 		ti.depend('year');
 		return wrapTemplateInstance(function (data) {
-			return data.theDate.getYear();
+			return data.activeDate.getYear();
 		});
 	},
 	getStyle: function () {
@@ -91,12 +92,11 @@ Template.datePickerPopup.events({
 			newlySelectedDate.decodeId(event.target.id);
 
 			template.data.parentUpdateCallback(newlySelectedDate);
-			Template.datePickerPopup.remove();
 		}
 	},
 	'click .prevMonth': function (event, template) {
 		if (template.data) {
-			template.data.theDate.flowIntoAdjacentYear(directionEnum.prevYear, 12);
+			template.data.activeDate.flowIntoAdjacentYear(directionEnum.prevYear, 12);
 
 			ti.changed('month');
 			ti.changed('year');
@@ -104,7 +104,7 @@ Template.datePickerPopup.events({
 	},
 	'click .nextMonth': function (event, template) {
 		if (template.data) {
-			template.data.theDate.flowIntoAdjacentYear(directionEnum.nextYear, 1);
+			template.data.activeDate.flowIntoAdjacentYear(directionEnum.nextYear, 1);
 
 			ti.changed('month');
 			ti.changed('year');
@@ -112,13 +112,13 @@ Template.datePickerPopup.events({
 	},
 	'click .decYear': function (event, template) {
 		if (template.data) {
-			template.data.theDate.setYear(template.data.theDate.getYear() - 1); // writing incYear and decYear methods isn't warranted yet
+			template.data.activeDate.setYear(template.data.activeDate.getYear() - 1); // writing incYear and decYear methods isn't warranted yet
 			ti.changed('year');
 		}
 	},
 	'click .incYear': function (event, template) {
 		if (template.data) {
-			template.data.theDate.setYear(template.data.theDate.getYear() + 1);
+			template.data.activeDate.setYear(template.data.activeDate.getYear() + 1);
 
 			ti.changed('year');
 		}

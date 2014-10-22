@@ -32,9 +32,6 @@ Template.datePicker.helpers({
 			return data.guid;
 		});
 	},
-	remove: function () {
-		Blaze.remove(renderedView);
-	}, 
 	datePickerOpen: function () {
 		return Template.instance().datePickerOpen.get();
 	}
@@ -49,34 +46,43 @@ var getOffset = function (elementId, popupOffset) {
 	};
 };
 
+var closePopover = function (template) {
+	Blaze.remove(template.data.datePickerPopupView); // remove the popover itself
+	template.data.openedState = false; // mark return unopened state
+
+	template.datePickerOpen.set(false); // shut down the div that looks for clicks outside of the popover
+};
+
 Template.datePicker.events({
 	'click .openButton': function (event, template) {
 		if (template.data) {
-			var saveCallback = function (newlySelectedDate) {
-				template.data.theDate = newlySelectedDate;
-				template.data.topSaveCallback(template.data.theDate.getStringEncoding());
-				ti.changed('currentDateDep');
+			if (template.data.openedState) {
+				closePopover(template);
+			}
+			else {
+				var saveCallback = function (newlySelectedDate) {
+					template.data.theDate = newlySelectedDate;
+					template.data.topSaveCallback(template.data.theDate.getStringEncoding());
+					ti.changed('currentDateDep');
 
-				template.data.openedState = false;
-			};
+					closePopover(template);
+				};
 
-			var elementId = 'date-picker-popup-anchor-' + template.data.guid;
-			var domElement = document.getElementById(elementId);
+				var elementId = 'date-picker-popup-anchor-' + template.data.guid;
+				var domElement = document.getElementById(elementId);
 
-			var popupOffset = getOffset('date-picker-calendar-button-' + template.data.guid, template.data.popupOffset);
+				var popupOffset = getOffset('date-picker-calendar-button-' + template.data.guid, template.data.popupOffset);
 
-			template.data.datePickerPopupView = Template.datePickerPopup.setup(saveCallback, template.view, popupOffset, domElement, template.data.theDate);
-			template.data.openedState = true;
+				template.data.datePickerPopupView = Template.datePickerPopup.setup(saveCallback, template.view, popupOffset, domElement, template.data.theDate);
+				template.data.openedState = true;
 
-			template.datePickerOpen.set(true);
+				template.datePickerOpen.set(true);
+			}
 		}
 	},
 	'click #datePickerOff': function (event, template) {
 		if (template.data && template.data.openedState) {
-			Blaze.remove(template.data.datePickerPopupView);
-			template.data.openedState = false;
-			
-			template.datePickerOpen.set(false);
+			closePopover(template);
 		}
 	}
 });
