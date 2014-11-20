@@ -99,7 +99,9 @@ body {
 		}
 	}
 	&--arrow {
+		cursor: pointer;
 		> g {
+			cursor: pointer;
 			stroke: #000;
 		}
 		&__left,
@@ -171,10 +173,6 @@ body {
 				}
 			}
 		}
-		td.day:hover {
-			cursor: pointer;
-			color: $sky-blue;
-		}
 	}
 	&__month-active,
 	&__year-active {
@@ -236,6 +234,13 @@ body {
 			margin-bottom: 0.2em;
 		}
 	}
+}
+
+// Move this into regular flow once we have time to control the class better
+.day:hover,
+.day__active {
+	cursor: pointer;
+	color: $sky-blue;
 }
 
 $SECTIONS = "day", "month", "year";
