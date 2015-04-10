@@ -29,5 +29,5 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
 	api.use('tinytest');
 	api.use('maxharris9:datepicker');
-	api.addFiles('maxharris9:datepicker-tests.js');
+	//api.addFiles('datepicker-tests.js');
 });
