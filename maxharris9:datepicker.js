@@ -23,14 +23,18 @@ Template.datePicker.created = function () {
 Template.datePicker.helpers({
 	currentDate: function () {
 		ti.depend('currentDateDep');
-		return wrapTemplateInstance(function (data) {
+		var template = Template.instance();
+		if (template.data) {
+			var data = template.data;
 			return data.theDate.getStringEncoding();
-		});
+		}
 	},
 	guid: function () {
-		return wrapTemplateInstance(function (data) {
+		var template = Template.instance();
+		if (template.data) {
+			var data = template.data;
 			return data.guid;
-		});
+		}
 	},
 	datePickerOpen: function () {
 		return Template.instance().datePickerOpen.get();

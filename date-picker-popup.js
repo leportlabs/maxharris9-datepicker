@@ -61,27 +61,35 @@ Template.datePickerPopup.helpers({
 	calendarHtml: function () {
 		ti.depend('month');
 		ti.depend('year');
-		return wrapTemplateInstance(function (data) {
+		var template = Template.instance();
+		if (template.data) {
+			var data = template.data;
 			var cal = Calendar(data.activeDate, data.originalDate, data.guid);
 			return cal.renderHtmlCalendar();
-		});
+		}
 	},
 	selectedMonth: function () {
 		ti.depend('month');
-		return wrapTemplateInstance(function (data) {
+		var template = Template.instance();
+		if (template.data) {
+			var data = template.data;
 			return allMonths[data.activeDate.getMonth() - 1].month;
-		});
+		}
 	},
 	selectedYear: function () {
 		ti.depend('year');
-		return wrapTemplateInstance(function (data) {
+		var template = Template.instance();
+		if (template.data) {
+			var data = template.data;
 			return data.activeDate.getYear();
-		});
+		}
 	},
 	getStyle: function () {
-		return wrapTemplateInstance(function (data) {
+		var template = Template.instance();
+		if (template.data) {
+			var data = template.data;
 			return { style: "display: block; top: " + data.popupOffset.top + "px; left: " + data.popupOffset.left + "px;" };
-		});
+		}
 	}
 });
 
